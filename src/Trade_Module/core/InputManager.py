@@ -7,7 +7,8 @@ import pickle
 import os
 
 from src.Trade_Module.paramters.country_info import country_dict
-from src.Trade_Module.paramters.paths import src_path
+from src.Trade_Module.paramters.paths import INPUT_PATH
+import src.Trade_Module.paramters.paramters as params
 
 
 class InputManager:
@@ -15,15 +16,13 @@ class InputManager:
         pass
 
     def _open_pickle(self):
-        """Open latest pkl file.
-        :return: object from pkl file
-        """
-        path = src_path
+        path = INPUT_PATH
         pkl_files = list(path.glob("*.pkl"))
 
         if not pkl_files:
-            print(f"No .pkl file found at: {path.resolve()}")
-            return None
+            raise FileNotFoundError(
+                f"No .pkl file found at: {path.resolve()}"
+            )
 
         file = max(pkl_files, key=lambda f: f.stat().st_mtime)
 
@@ -31,36 +30,107 @@ class InputManager:
 
         with gzip.open(file, "rb") as pkl_file:
             obj = pickle.load(pkl_file)
-        return obj["data_periods"]
-    
-        
-    def downcasting(self, data: pd.DataFrame):
-        data.RegionCode = data.RegionCode.astype("category")
-        data.CommodityCode = data.CommodityCode.astype("category")
-        data.domain = data.domain.astype("category")
-        data.price = data.price.astype("float32")
-        data.quantity = data.quantity.astype("float32")
-        data.Period = data.Period.astype("int16")
-        data.year = data.year.astype("int16")
-        data.Scenario = data.Scenario.astype("category")
-        data.Model = data.Model.astype("category")
-        return data
-    
+
+        self.data = obj["data_periods"]
+
+    def _rename_columns(self):
+        self.data = self.data.rename(columns=params.COLUMN_MAPPING)   
+
+    def _add_iso_codes(self):
+        self.data["Country"] = self.data["RegionCode"].map(country_dict)
+
+        self.data = (
+            self.data
+            .dropna(subset=["Country"])
+            .reset_index(drop=True)
+        )
+
+        self.data = self.data[
+            [
+                "Country",
+                "Commodity",
+                "domain",
+                "Period",
+                "p",
+                "q",
+            ]
+        ]
+
+    def _aggregate_domains(self):
+        self.data = self.data[
+            ~self.data["domain"].isin(params.DOMAINS_TO_REMOVE)
+        ].copy()
+
+        self.data["domain"] = self.data["domain"].replace(
+            params.DOMAIN_MAPPING
+        )
+
+        self.data = (
+            self.data
+            .groupby(
+                params.GROUP_COLUMNS,
+                as_index=False,
+                observed=True
+            )
+            .agg(
+                p=("p", "max"),
+                q=("q", "max"),
+            )
+        )
+
+    def _downcasting(self):
+        self.data["Country"] = self.data["Country"].astype("category")
+        self.data["Commodity"] = self.data["Commodity"].astype("category")
+        self.data["domain"] = self.data["domain"].astype("category")
+        self.data["p"] = self.data["p"].astype("float32")
+        self.data["q"] = self.data["q"].astype("float32")
+        self.data["l1_p"] = self.data["l1_p"].astype("float32")
+        self.data["l1_q"] = self.data["l1_q"].astype("float32")
+        self.data["Period"] = self.data["Period"].astype("int16")
+
+    def _lagged_data(self, column: str):
+        self.data[f"l1_{column}"] = (
+            self.data
+            .groupby(
+                params.LAG_GROUP_COLUMNS,
+                observed=True
+            )[column]
+            .shift(1)
+        )
+
+    def _pivot_domains(self):
+        self.data = self.data.pivot(
+            index=params.INDEX_COLUMNS,
+            columns="domain",
+            values=params.VALUE_COLUMNS,
+        )
+
+        self.data.columns = [
+            f"{domain}_{variable}"
+            for variable, domain in self.data.columns
+        ]
+
+        self.data = self.data.reset_index()
+
+    def _sort_data(self):
+        self.data = (
+            self.data
+            .sort_values(params.GROUP_COLUMNS)
+            .reset_index(drop=True)
+        )
+
     def main(self):
-        data = self._open_pickle()
-        data["Country"] = data["RegionCode"].map(country_dict)
-        data = data.dropna().reset_index(drop=True)
-        data = data[['Country', 'CommodityCode', 'domain', 'Period', 'year','price', 'quantity',]]
+        self._open_pickle()
+        self._rename_columns()    
+        self._add_iso_codes()
+        self._aggregate_domains()
+        self._sort_data()
+        self._lagged_data("p")
+        self._lagged_data("q")
+        self._downcasting()
+        self._pivot_domains()
 
-        data["price_previous"] = (
-            data.groupby(["Country", "CommodityCode", "domain"])["price"].shift(1)
-        )
+        print(self.data)
+        self.data.info()
 
-        data["quantity_previous"] = (
-            data.groupby(["Country", "CommodityCode", "domain"])["quantity"].shift(1)
-        )
-        
-        print(data)
-        # country_data = self.read_country_data()
-        # commodity_data = self.read_commodity_data()
-        return data
+        return self.data
