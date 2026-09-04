@@ -1,0 +1,37 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["Trade_Module*"]
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.package-data]
+"Trade_Module" = ["assets/*.css", "assets/*.js", "assets/*.png"]
+
+[project]
+name = "Trade_Module"
+version = "0.0.0"
+description = """
+An add-on for TiMBA to obtain bilateral Trade from scenario output.
+"""
+readme = "README.md"
+requires-python = ">=3.11"
+license = "AGPL-3.0-or-later"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: Microsoft :: Windows",
+    "Intended Audience :: Science/Research",
+]
+dependencies = [
+    "click==8.1.7",
+    "pandas>=1.5.3",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest==8.3.5",
+    "pytest-cov==6.2.1"
+]

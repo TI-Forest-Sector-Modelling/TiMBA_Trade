@@ -1,0 +1,43 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: TiMBA Charts
+type: software
+authors:
+  - given-names: Christian
+    family-names: Morland
+    email: christian.morland@thuenen.de
+    affiliation: Thünen Institue of Forestry
+    orcid: 'https://orcid.org/0000-0001-6600-570X'
+  - given-names: Julia
+    family-names: Tandetzki
+    email: julia.tandetzki@ec.europa.eu
+    affiliation: European Commission - Joint Research Centre
+    orcid: 'https://orcid.org/0000-0002-0630-9434'
+  - given-names: Tomke
+    family-names: Honkomp
+    email: tomke.honkomp@thuenen.de
+    affiliation: Thünen Institue of Forestry
+    orcid: 'https://orcid.org/0000-0002-6719-0190'
+identifiers:
+  - type: doi
+    value: '10.5281/zenodo.15631061'
+    description: 'DOI of the Zenodo archive'
+repository-code: 'https://github.com/TI-Forest-Sector-Modelling/TiMBA_Charts/tree/v1.0.1'
+abstract: |-
+  This package can be used as a toolkit for analysing TiMBA results after simulation.
+  The package provides a dashboard which let the user interact with the main TiMBA results. 
+  This includes the development of prices, production, consumption, and trade of forest products 
+  as well as forest stock development. It also gives information about historic developments as 
+  reported by the FAOSTAT. In principle, the toolkit can be easily adapted and used for the 
+  analysis of any forest sector model as long as the data resembles the format of the TiMBA output. 
+keywords:
+  - research
+  - Forest sector model
+  - partial equilibrium model
+  - optimization
+  - wood markets
+license: AGPL-3.0-or-later
+version: 1.0.1
+date-released: '2026-03-09'
