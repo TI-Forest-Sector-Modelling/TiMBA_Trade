@@ -38,8 +38,6 @@ INDEX_COLUMNS = [
 VALUE_COLUMNS = [
     "p",
     "q",
-    "l1_p",
-    "l1_q",
 ]
 
 COLUMN_MAPPING = {
@@ -47,3 +45,26 @@ COLUMN_MAPPING = {
     "quantity": "q",
     "CommodityCode": "Commodity",
 }
+
+COUNTRY_COLUMNS = [
+    "Country",
+    "Commodity",
+    "Period",
+    "P_p",
+    "P_q",
+    "M_p",
+    "M_q",
+    "X_p",
+    "X_q",
+]
+
+PARTNER_COLUMNS = [
+    "Country",
+    "Commodity",
+    "Period",
+    "X_p",
+    "X_q",
+]
+
+# Countries per chunk size maybe changed if the RAM is smaller.
+PROCESS_CHUNK_SIZE = 200

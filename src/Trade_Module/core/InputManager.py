@@ -84,19 +84,7 @@ class InputManager:
         self.data["domain"] = self.data["domain"].astype("category")
         self.data["p"] = self.data["p"].astype("float32")
         self.data["q"] = self.data["q"].astype("float32")
-        self.data["l1_p"] = self.data["l1_p"].astype("float32")
-        self.data["l1_q"] = self.data["l1_q"].astype("float32")
         self.data["Period"] = self.data["Period"].astype("int16")
-
-    def _lagged_data(self, column: str):
-        self.data[f"l1_{column}"] = (
-            self.data
-            .groupby(
-                params.LAG_GROUP_COLUMNS,
-                observed=True
-            )[column]
-            .shift(1)
-        )
 
     def _pivot_domains(self):
         self.data = self.data.pivot(
@@ -125,12 +113,7 @@ class InputManager:
         self._add_iso_codes()
         self._aggregate_domains()
         self._sort_data()
-        self._lagged_data("p")
-        self._lagged_data("q")
         self._downcasting()
         self._pivot_domains()
-
-        print(self.data)
-        self.data.info()
 
         return self.data

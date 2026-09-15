@@ -2,7 +2,7 @@
 .vscode/
 __pycache__/
 /classes/__pycache__/
-/data/output/
+output/
 *.py[cod]
 *$py.class
 test/.pytest_cache/

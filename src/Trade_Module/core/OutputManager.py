@@ -9,5 +9,6 @@ class OutputManager:
         pass
 
     def save_df(self, df:pd.DataFrame, file_name:str):
+        df = df[df.Country == "DEU"]
         output_path = OUTPUT_PATH / Path(file_name + ".csv")
         df.to_csv(output_path) 
