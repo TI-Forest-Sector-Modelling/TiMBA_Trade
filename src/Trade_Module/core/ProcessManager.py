@@ -73,10 +73,14 @@ class ProcessManager:
                 "M_q_o": self._to_dense_array(self.country_data, "Country", "M_q"),
                 "X_p_o": self._to_dense_array(self.country_data, "Country", "X_p"),
                 "X_q_o": self._to_dense_array(self.country_data, "Country", "X_q"),
+                "P_p_p": self._to_dense_array(self.partner_data, "Partner", "P_p"),
+                "P_q_p": self._to_dense_array(self.partner_data, "Partner", "P_q"),
                 "X_p_p": self._to_dense_array(self.partner_data, "Partner", "X_p"),
                 "X_q_p": self._to_dense_array(self.partner_data, "Partner", "X_q"),
             }
         )
+
+        self.dataset["P_share"] = np.log(self.dataset["P_p_o"] / self.dataset["P_p_p"])
 
         self._add_lags()
 
@@ -111,18 +115,26 @@ class ProcessManager:
         self.result = self.result[
             [
                 "Country", "Partner", "Commodity", "Period",
-                "P_p_o", "P_q_o", "M_p_o", "M_q_o", "X_p_p", "X_q_p",
-                "P_p_o_lag", "P_q_o_lag", "M_p_o_lag", "M_q_o_lag", "X_p_p_lag", "X_q_p_lag",
+                "P_p_o", "P_p_o_lag",
+                "P_q_o", "P_q_o_lag", 
+                "P_p_p", "P_p_p_lag",  
+                "P_q_p", "P_q_p_lag",
+                "M_p_o", "M_p_o_lag", 
+                "M_q_o", "M_q_o_lag",
+                "X_p_o", "X_p_o_lag",  
+                "X_q_o", "X_q_o_lag",
+                "X_p_p", "X_p_p_lag",  
+                "X_q_p", "X_q_p_lag",  
+                "P_share", "P_share_lag",
             ]
         ]
+
 
     def main(self):
         self.start_process()
         self._prepare_data()
         self._build_dataset()
         self._process_all()
-        print(self.result)
-        self.result.info()
         self.end_process()
 
         return self.result

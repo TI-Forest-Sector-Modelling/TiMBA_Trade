@@ -62,6 +62,8 @@ PARTNER_COLUMNS = [
     "Country",
     "Commodity",
     "Period",
+    "P_p",
+    "P_q",
     "X_p",
     "X_q",
 ]
