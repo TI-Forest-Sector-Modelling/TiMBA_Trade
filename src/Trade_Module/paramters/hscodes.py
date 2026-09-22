@@ -352,3 +352,23 @@ timba_commodity_list = [woodfuel,industrial_roundwood_coniferous,industrial_roun
                         veneer_sheets,plywood,particle_board,fibreboard,mechanical_wood_pulp,
                         semi_chemical_wood_pulp,chemical_wood_pulp,dissolving_wood_pulp,
                         newsprint,printing_writing_papers,other_paper_paperboard]
+
+timba_comcode = {
+    1867:78,
+    1633:79,
+    1864:80,
+    1866:81,
+    1871:82,
+    1632:83,
+    1640:84,
+    1697:85,
+    1874:86,
+    1654:87,
+    1656:88,
+    1668:89,
+    1669:90,
+    1671:91,
+    1674:92,
+    1675:93,
+}
+

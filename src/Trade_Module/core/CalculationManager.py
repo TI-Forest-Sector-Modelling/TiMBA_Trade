@@ -23,9 +23,18 @@ class CalcManager:
         df["LD"] = df.P_q_o - df.X_q_o + df.M_q_o
         df["LD_lag"] = df.P_q_o_lag - df.X_q_o_lag + df.M_q_o_lag
         df["LD_growth"] = df.LD / df.LD_lag
+
+        df.rename(
+            columns={
+                "Country":"Reporter"
+            },
+            inplace=True
+        )
+
         self.results = df[[
-            "Country","Partner","Commodity",  
-            "Period","P_share_growth","LD_growth"
+            "Reporter", "Partner", "Commodity", "Period",
+            "X_q_o", "M_q_o", "X_q_p", "M_q_p",
+            "P_share_growth","LD_growth"
         ]]
 
     def clip_shares(self,cols:list,lb_fix:float=None,ub_fix:float=None):
@@ -42,10 +51,7 @@ class CalcManager:
             df[col] = df[col].clip(lower=lb, upper=ub)
 
     def _combined_effect(self):
-        print(self.results)
         self.results["M_growth"] = self.results["LD_growth"] * self.results["P_share_growth"] ** (1)
-        print(self.results)
-
         
     def main(self):
         self._get_data()

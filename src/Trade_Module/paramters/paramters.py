@@ -66,6 +66,7 @@ PARTNER_COLUMNS = [
     "P_q",
     "X_p",
     "X_q",
+    "M_q",
 ]
 
 # Countries per chunk size maybe changed if the RAM is smaller.

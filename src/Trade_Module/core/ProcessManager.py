@@ -77,6 +77,7 @@ class ProcessManager:
                 "P_q_p": self._to_dense_array(self.partner_data, "Partner", "P_q"),
                 "X_p_p": self._to_dense_array(self.partner_data, "Partner", "X_p"),
                 "X_q_p": self._to_dense_array(self.partner_data, "Partner", "X_q"),
+                "M_q_p": self._to_dense_array(self.partner_data, "Partner", "M_q"),
             }
         )
 
@@ -121,6 +122,7 @@ class ProcessManager:
                 "P_q_p", "P_q_p_lag",
                 "M_p_o", "M_p_o_lag", 
                 "M_q_o", "M_q_o_lag",
+                "M_q_p", "M_q_p_lag",
                 "X_p_o", "X_p_o_lag",  
                 "X_q_o", "X_q_o_lag",
                 "X_p_p", "X_p_p_lag",  

@@ -2,7 +2,7 @@
 # Visit https://bit.ly/cffinit to generate yours today!
 
 cff-version: 1.2.0
-title: TiMBA Charts
+title: Forest Sectort Trade Module
 type: software
 authors:
   - given-names: Christian
@@ -10,21 +10,6 @@ authors:
     email: christian.morland@thuenen.de
     affiliation: Thünen Institue of Forestry
     orcid: 'https://orcid.org/0000-0001-6600-570X'
-  - given-names: Julia
-    family-names: Tandetzki
-    email: julia.tandetzki@ec.europa.eu
-    affiliation: European Commission - Joint Research Centre
-    orcid: 'https://orcid.org/0000-0002-0630-9434'
-  - given-names: Tomke
-    family-names: Honkomp
-    email: tomke.honkomp@thuenen.de
-    affiliation: Thünen Institue of Forestry
-    orcid: 'https://orcid.org/0000-0002-6719-0190'
-identifiers:
-  - type: doi
-    value: '10.5281/zenodo.15631061'
-    description: 'DOI of the Zenodo archive'
-repository-code: 'https://github.com/TI-Forest-Sector-Modelling/TiMBA_Charts/tree/v1.0.1'
 abstract: |-
   This package can be used as a toolkit for analysing TiMBA results after simulation.
   The package provides a dashboard which let the user interact with the main TiMBA results. 
