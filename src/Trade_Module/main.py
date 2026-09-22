@@ -111,10 +111,12 @@ if __name__== "__main__":
     total2["Commodity"] = total2["Commodity"].map(timba_comcode)
 
     total2["Export_only_share"] = total2["Export_bilateral"] / total2["Export_total_exporter"]
+    total2["Import_only_share"] = total2["Import_bilateral"] / total2["Import_total_exporter"]
 
     biTrade_shares = total2[[
         "Reporter", "Partner", "Commodity", "Period",
-        "Export_bilateral","Export_only_share"
+        "Export_bilateral", "Export_only_share",
+        "Import_bilateral", "Import_only_share"
     ]]
 
     df = cm.main()
