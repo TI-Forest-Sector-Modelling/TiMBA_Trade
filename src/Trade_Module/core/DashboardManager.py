@@ -396,7 +396,7 @@ class Dashboard:
             values="Export_only_share",
             color="ColorPair",
             color_discrete_map=color_map,
-            title="Export-only share",
+            title="Export bilateral from BACI for 2023",
         )
 
         fig.update_traces(
@@ -568,15 +568,13 @@ class Dashboard:
             category_orders={
                 "ColorPair": color_order,
             },
-            title=(
-                f"Export development of "
-                f"top {self.top} country pairs"
-            ),
+            title=f"Export development from TiMBA in the top {self.top} country pairs",
+            template="plotly_white",
         )
 
         fig.update_yaxes(
             tickformat=".1%",
-            title="Export development (%)",
+            title="Export development from TiMBA (%)",
         )
 
         fig.update_xaxes(
@@ -619,7 +617,7 @@ class Dashboard:
                 "xanchor": "center",
                 "x": 0.5,
                 "font": {
-                    "size": 8,
+                    "size": 14,
                 },
             },
             bargap=0.10,

@@ -12,6 +12,7 @@ om = OutputManager()
 class CalcManager:
     def __init__(self):
         self.data = None
+        self.AE = 1
 
     def _get_data(self):
         pm = ProcessManager(data=im.main())
@@ -51,7 +52,7 @@ class CalcManager:
             df[col] = df[col].clip(lower=lb, upper=ub)
 
     def _combined_effect(self):
-        self.results["M_growth"] = self.results["LD_growth"] * self.results["P_share_growth"] ** (1)
+        self.results["M_growth"] = self.results["LD_growth"] * self.results["P_share_growth"] ** (self.AE)
         
     def main(self):
         self._get_data()
