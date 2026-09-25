@@ -3,6 +3,7 @@
 __pycache__/
 /classes/__pycache__/
 output/
+ras_output/
 data/
 *.py[cod]
 *$py.class

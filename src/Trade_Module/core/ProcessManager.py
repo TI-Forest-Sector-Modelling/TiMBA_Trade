@@ -5,6 +5,9 @@ import time
 
 import src.Trade_Module.paramters.paramters as params
 
+import logging
+logger = logging.getLogger(__name__)
+
 
 class ProcessManager:
 
@@ -21,7 +24,7 @@ class ProcessManager:
 
     def start_process(self):
         self.start_time = time.time()
-        print(f"Process started...")
+        logger.info(f"Process started...")
 
 
     def end_process(self):
@@ -30,8 +33,8 @@ class ProcessManager:
         
         end_time = time.time()
         elapsed_time = round(end_time - self.start_time, 2)
-        print(f"Process completed!")
-        print(
+        logger.info(f"Process completed!")
+        logger.info(
             f"--- Time: {elapsed_time:.1f} seconds ({elapsed_time / 60:.1f} min)"
         )
 

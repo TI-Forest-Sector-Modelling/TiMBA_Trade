@@ -10,6 +10,9 @@ from src.Trade_Module.paramters.country_info import country_dict
 from src.Trade_Module.paramters.paths import INPUT_PATH
 import src.Trade_Module.paramters.paramters as params
 
+import logging
+logger = logging.getLogger(__name__)
+
 
 class InputManager:
     def __init__(self):
@@ -26,7 +29,7 @@ class InputManager:
 
         file = max(pkl_files, key=lambda f: f.stat().st_mtime)
 
-        print(f"Open pkl at: {file.resolve()}")
+        logger.info(f"Open pkl at: {file.resolve()}")
 
         with gzip.open(file, "rb") as pkl_file:
             obj = pickle.load(pkl_file)

@@ -1,25 +1,20 @@
 from src.Trade_Module.core.CalculationManager import CalcManager
 from src.Trade_Module.core.OutputManager import OutputManager
 from src.Trade_Module.core.DashboardManager import Dashboard
-from src.Trade_Module.paramters.paths import INPUT_PATH
+from src.Trade_Module.paramters.paths import BITRADEPATH
 from src.Trade_Module.paramters.hscodes import timba_commodity_list, timba_comcode
+from src.Trade_Module.utils.helper import hs_to_fao_dict
+from src.Trade_Module.utils.logger import setup_logging
+from src.Trade_Module.core.RAS import RAS
 
+import logging
 import pandas as pd
 
-
-def hs_to_fao_dict(commodity_list):
-    hs_to_fao_map = {
-        hs_code: entry["fao_code"]
-        for entry in commodity_list
-        for hs_code in entry["hs02_codes"]
-    }
-
-    return dict(sorted(hs_to_fao_map.items()))
-
+setup_logging()
+logger = logging.getLogger(__name__)
 
 def load_baci_data():
-    return pd.read_parquet(INPUT_PATH / "BACI_DATA_as_vector.parquet")
-
+    return pd.read_parquet(BITRADEPATH)
 
 def prepare_baci_data(baci_data, commodity_list):
     hs_to_fao_map = hs_to_fao_dict(commodity_list)
@@ -173,6 +168,26 @@ def prepare_bilateral_trade_shares(
         / total["Import_total_importer"]
     )
 
+    total["Trade_Volumn_exporter"] = (
+        total["Export_total_exporter"] +
+        total["Import_total_exporter"]
+    )
+
+    total["Trade_Volumn_bilateral"] = (
+        total["Import_bilateral"] +
+        total["Export_bilateral"]
+    )
+
+    total["Trade_Volumn_Share"] = (
+        total["Trade_Volumn_bilateral"]
+        / total["Trade_Volumn_exporter"]
+    )
+
+    total["X_to_TV_bilateral"] = (
+        total["Export_bilateral"]
+        / total["Trade_Volumn_bilateral"]
+    )
+
     return total[
         [
             "Reporter",
@@ -181,8 +196,14 @@ def prepare_bilateral_trade_shares(
             "Period",
             "Export_bilateral",
             "Export_only_share",
+            "Export_total_exporter",
             "Import_bilateral",
             "Import_only_share",
+            "Import_total_exporter",
+            "Trade_Volumn_bilateral",
+            "Trade_Volumn_Share",
+            "Trade_Volumn_exporter",
+            "X_to_TV_bilateral",
         ]
     ]
 
@@ -227,26 +248,12 @@ def create_period_pivot(df, value_column):
     )
 
 
-def save_results(
-    output_manager,
-    price_change,
-    total_change,
-    bilateral_trade_shares,
-):
-    output_manager.save_df(
-        df=price_change,
-        file_name="price_change",
-    )
-
-    output_manager.save_df(
-        df=total_change,
-        file_name="total_change",
-    )
-
-    output_manager.save_df(
-        df=bilateral_trade_shares,
-        file_name="biTrade_shares",
-    )
+def save_multiple_results(output_manager,dict_to_save):
+    for key, value in dict_to_save.items():
+        output_manager.save_df(
+            df=value,
+            file_name=key,
+        )
 
 
 def run_dashboard(
@@ -265,10 +272,8 @@ def main():
     calc_manager = CalcManager()
     output_manager = OutputManager()
 
-    baci_data = load_baci_data()
-
     baci_data = prepare_baci_data(
-        baci_data=baci_data,
+        baci_data=load_baci_data(),
         commodity_list=timba_commodity_list,
     )
 
@@ -287,19 +292,57 @@ def main():
         calc_manager=calc_manager,
     )
 
-    save_results(
-        output_manager=output_manager,
-        price_change=price_change,
-        total_change=total_change,
-        bilateral_trade_shares=bilateral_trade_shares,
+    df = calc_manager.main().copy()
+
+    bt_df=bilateral_trade_shares[["Reporter","Partner","Commodity","Period","Export_bilateral"]]#,"Trade_Volumn_Share","X_to_TV_bilateral"]]
+    bt_df["Export_bilateral"] = bt_df["Export_bilateral"] /1000
+    ft_df = df[["Reporter","Partner","Commodity","Period","X_q_o","M_q_p"]]
+
+    merge_keys = ["Reporter","Partner", "Commodity", "Period"]
+
+    ras_df = ft_df.merge(
+        bt_df,
+        on=merge_keys,
+        how="left"
     )
 
-    run_dashboard(
-        bilateral_trade_shares=bilateral_trade_shares,
-        price_change=price_change,
+    ras_df=ras_df[ras_df.Period==0]
+    
+    print(bt_df)
+    print(df)
+    print(ras_df)
+    print(ras_df.describe())
+
+    dict_to_save = {
+        "price_change":price_change,
+        "total_change":total_change,
+        "biTrade_shares":bilateral_trade_shares,
+        "ras_df":ras_df
+    }
+
+    save_multiple_results(
+        output_manager=output_manager,
+        dict_to_save=dict_to_save,
     )
+
+    # run_dashboard(
+    #     bilateral_trade_shares=bilateral_trade_shares,
+    #     price_change=price_change,
+    # )
+
+    ras_df = ras_df[ras_df['Commodity'] != 89]
+    ras_df = ras_df[ras_df['Commodity'] != 90]
+    ras_df = ras_df[ras_df['Commodity'] != 93]
+    
+    ras = RAS(
+        tol=1e-3,
+        max_iter=50_000,
+        output_dir="ras_output"
+    )
+
+    ras_result = ras.fit(ras_df)
+    print(ras_result)
 
 
 if __name__ == "__main__":
     main()
-    
