@@ -1,22 +1,19 @@
-import pandas as pd
 import numpy as np
 
-from src.Trade_Module.core.InputManager import InputManager
 from src.Trade_Module.core.OutputManager import OutputManager
-from src.Trade_Module.core.ProcessManager import ProcessManager
 
-im = InputManager()
 om = OutputManager()
 
 
 class CalcManager:
     def __init__(self):
-        self.data = None
         self.AE = 1
 
-    def _get_data(self):
-        pm = ProcessManager(data=im.main())
-        self.data = pm.main()
+    @staticmethod
+    def log_of_price_share(data):
+        with np.errstate(divide="ignore"):
+            data["P_share"] = np.log(data["P_p_o"] / data["P_p_p"])
+        return data
 
     def _calc_price_share(self):
         df = self.data

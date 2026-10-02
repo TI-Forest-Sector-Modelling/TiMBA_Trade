@@ -3,8 +3,6 @@
 __pycache__/
 output/
 data/
-ras_output/
-data/
 *.py[cod]
 *$py.class
 test/.pytest_cache/
