@@ -9,6 +9,8 @@ def init_path(folder):
 PACKAGEDIR = Path(__file__).parent.parent
 
 INPUT_PATH = PACKAGEDIR / Path(r"data/input/")
+CONFIG_PATH = PACKAGEDIR / Path(r"config/user_config.yml")
+
 BACI_FILE = "BACI_DATA_as_vector.parquet"
 BITRADEPATH = INPUT_PATH / BACI_FILE
 

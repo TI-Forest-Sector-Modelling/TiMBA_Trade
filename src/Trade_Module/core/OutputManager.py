@@ -15,7 +15,7 @@ class OutputManager:
         for i in range(max_attempts):
             file = (file_name + ".csv") if i == 0 else f"{file_name}_({i}).csv"
             try:
-                df.to_csv(OUTPUT_PATH / Path(file)) 
+                df.to_csv(OUTPUT_PATH / Path(file), index=False) 
                 logger.info(f"CSV file saved at: {OUTPUT_PATH / Path(file)}")
                 return file
             except PermissionError:

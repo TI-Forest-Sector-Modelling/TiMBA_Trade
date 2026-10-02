@@ -153,78 +153,22 @@ def prepare_bilateral_trade_shares(
     )
 
     total["Period"] = 0
+    total["Commodity"] = total["Commodity"].map(commodity_code_mapping)
 
-    total["Commodity"] = total["Commodity"].map(
-        commodity_code_mapping
-    )
-
-    total["Export_only_share"] = (
-        total["Export_bilateral"]
-        / total["Export_total_exporter"]
-    )
-
-    total["Import_only_share"] = (
-        total["Import_bilateral"]
-        / total["Import_total_importer"]
-    )
-
-    total["Trade_Volumn_exporter"] = (
-        total["Export_total_exporter"] +
-        total["Import_total_exporter"]
-    )
-
-    total["Trade_Volumn_bilateral"] = (
-        total["Import_bilateral"] +
-        total["Export_bilateral"]
-    )
-
-    total["Trade_Volumn_Share"] = (
-        total["Trade_Volumn_bilateral"]
-        / total["Trade_Volumn_exporter"]
-    )
-
-    total["X_to_TV_bilateral"] = (
-        total["Export_bilateral"]
-        / total["Trade_Volumn_bilateral"]
-    )
-
-    return total[
-        [
-            "Reporter",
-            "Partner",
-            "Commodity",
-            "Period",
-            "Export_bilateral",
-            "Export_only_share",
-            "Export_total_exporter",
-            "Import_bilateral",
-            "Import_only_share",
-            "Import_total_exporter",
-            "Trade_Volumn_bilateral",
-            "Trade_Volumn_Share",
-            "Trade_Volumn_exporter",
-            "X_to_TV_bilateral",
-        ]
-    ]
+    return total
 
 
 def calculate_growth_data(calc_manager):
     df = calc_manager.main().copy()
 
     df["P_share_growth"] = df["P_share_growth"] - 1
-    df["M_growth"] = df["M_growth"] - 1
 
     price_change = create_period_pivot(
         df=df,
         value_column="P_share_growth",
     )
 
-    total_change = create_period_pivot(
-        df=df,
-        value_column="M_growth",
-    )
-
-    return price_change, total_change
+    return price_change
 
 
 def create_period_pivot(df, value_column):
@@ -288,7 +232,7 @@ def main():
         commodity_code_mapping=timba_comcode,
     )
 
-    price_change, total_change = calculate_growth_data(
+    price_change = calculate_growth_data(
         calc_manager=calc_manager,
     )
 
@@ -308,22 +252,22 @@ def main():
 
     ras_df=ras_df[ras_df.Period==0]
     
-    print(bt_df)
+    # print(bt_df)
     print(df)
-    print(ras_df)
-    print(ras_df.describe())
+    # print(ras_df)
+    # print(ras_df.describe())
 
-    dict_to_save = {
-        "price_change":price_change,
-        "total_change":total_change,
-        "biTrade_shares":bilateral_trade_shares,
-        "ras_df":ras_df
-    }
+    # dict_to_save = {
+    #     "price_change":price_change,
+    #     "total_change":total_change,
+    #     "biTrade_shares":bilateral_trade_shares,
+    #     "ras_df":ras_df
+    # }
 
-    save_multiple_results(
-        output_manager=output_manager,
-        dict_to_save=dict_to_save,
-    )
+    # save_multiple_results(
+    #     output_manager=output_manager,
+    #     dict_to_save=dict_to_save,
+    # )
 
     # run_dashboard(
     #     bilateral_trade_shares=bilateral_trade_shares,
@@ -334,13 +278,9 @@ def main():
     ras_df = ras_df[ras_df['Commodity'] != 90]
     ras_df = ras_df[ras_df['Commodity'] != 93]
     
-    ras = RAS(
-        tol=1e-3,
-        max_iter=50_000,
-        output_dir="ras_output"
-    )
+    ras_result = RAS().fit(ras_df)
 
-    ras_result = ras.fit(ras_df)
+    ras_result = ras_result[["Reporter", "Partner",  "Commodity",  "Period",  "Export_bilateral"]]
     print(ras_result)
 
 
