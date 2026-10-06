@@ -1,6 +1,7 @@
 import time
 
 from src.Trade_Module.core.TiMBADataProcessor import TiMBADataProcessor
+from src.Trade_Module.core.BACIDataProcessor import BACIProcessor
 from src.Trade_Module.core.InputManager import InputManager
 
 import logging
@@ -38,13 +39,20 @@ class ProcessManager:
 
     def load_timba_process(self):
         self.start_process("Beginn to load TiMBA data")
-
         data = self.im.load_timba_results()
-
         tdp = TiMBADataProcessor(data)
         timba_data = tdp.main()
-
-
         self.end_process("TiMBA data loaded")
 
         return timba_data
+
+    def load_baci_process(self):
+        self.start_process("Beginn to load BACI data")
+        baci_data = self.im.load_baci_data()
+        bdp = BACIProcessor(df=baci_data)
+        baci_data = bdp.main()
+        self.end_process("BACI data loaded")
+
+        return baci_data
+
+    

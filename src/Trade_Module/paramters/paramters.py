@@ -71,3 +71,32 @@ PARTNER_COLUMNS = [
 
 # Countries per chunk size maybe changed if the RAM is smaller.
 PROCESS_CHUNK_SIZE = 200
+
+
+#BACI Data processing
+REPORTER_COLUMN = "Reporter_Code"
+PARTNER_COLUMN = "Partner_Code"
+COM_COLUMN = "HSCode"
+TIME_COLUMN = "Year"
+QUANTITY_COLUMN = "Quantity"
+
+BACIID = [
+    TIME_COLUMN, 
+    REPORTER_COLUMN, 
+    PARTNER_COLUMN, 
+    "Commodity"
+]
+
+X_M_NAMES = ["Export", "Import"]
+
+TOTALSID = [
+    TIME_COLUMN, 
+    REPORTER_COLUMN, 
+    "Commodity"
+]
+
+TOTALSIMPORTID = [
+    TIME_COLUMN, 
+    PARTNER_COLUMN, 
+    "Commodity"
+]

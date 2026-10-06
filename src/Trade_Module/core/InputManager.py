@@ -12,7 +12,8 @@ class InputManager:
     def __init__(self):
         pass
 
-    def load_timba_results(self):
+    @staticmethod
+    def load_timba_results():
         path = INPUT_PATH
         pkl_files = list(path.glob("*.pkl"))
 
@@ -31,6 +32,7 @@ class InputManager:
 
         return obj["data_periods"]
 
+    @staticmethod
     def load_baci_data():
         return pd.read_parquet(BITRADEPATH)
 

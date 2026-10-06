@@ -89,11 +89,6 @@ class TiMBADataProcessor:
             .reset_index(drop=True)
         )
 
-    def main(self):
-
-
-        return self.data
-
     def _prepare_timba_for_biltrade(self):
         self.country_data = self.data[params.COUNTRY_COLUMNS].copy()
 
@@ -140,8 +135,6 @@ class TiMBADataProcessor:
         return array
 
     def _build_dataset(self):
-
-    
         self.dataset = xr.Dataset(
             {
                 "P_p_o": self._to_dense_array(self.country_data, "Country", "P_p"),
@@ -207,7 +200,7 @@ class TiMBADataProcessor:
             ]
         ]
 
-    def main(self):
+    def main(self) -> pd.DataFrame:
         self._rename_columns()    
         self._add_iso_codes()
         self._aggregate_domains()
@@ -217,5 +210,5 @@ class TiMBADataProcessor:
         self._prepare_timba_for_biltrade()
         self._build_dataset()
         self._process_all()
-        return self.result
 
+        return self.result
