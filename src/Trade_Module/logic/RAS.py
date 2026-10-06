@@ -16,7 +16,7 @@ class RAS:
 
     def fit(self, df):
         groups = list(df.groupby(self.commodity_col, sort=True))
-        logger.info(f"Start RAS for {len(groups)} commodities in '{self.output_dir}'")
+        logger.info(f" Start RAS for {len(groups)} commodities in '{self.output_dir}'")
  
         out = Parallel(n_jobs=self.n_jobs)(
             delayed(self._fit_commodity)(c, g) for c, g in groups
@@ -146,9 +146,9 @@ class RAS:
             rs = T.sum(axis=1)
             err = np.abs(rs - tr).max()
             if err < tol:
-                logger.info(f"Commodity: {commodity}; Converging after {i} iterations (error = {err:.2e})")
+                logger.info(f" Commodity: {commodity}; Converging after {i} iterations (error = {err:.2e})")
                 return T, i, True
  
-        logger.warning(f"Commodity: {commodity}; Max. iterations ({self.max_iter}) reached before converging ({err:.2e} > error tolerance of {tol:.2e})")
+        logger.warning(f" Commodity: {commodity}; Max. iterations ({self.max_iter}) reached before converging ({err:.2e} > error tolerance of {tol:.2e})")
         return T, self.max_iter, False
  

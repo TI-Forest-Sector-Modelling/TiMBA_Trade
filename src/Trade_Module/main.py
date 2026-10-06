@@ -8,8 +8,7 @@ logger = logging.getLogger(__name__)
 
 def main():
     ras_df = ProcessManager().main_process()
-    print(ras_df)
-
+    
 
 if __name__ == "__main__":
     main()

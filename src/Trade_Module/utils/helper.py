@@ -20,7 +20,4 @@ def load_config() -> dict:
 def get_ras_parameters() -> dict:
     """Return config dict for RAS parameters"""
     config = load_config()
-    print(config)
-    print(config["RAS_PARAMETERS"]["cutoff"])
-    print(type(config["RAS_PARAMETERS"]["cutoff"]))
     return config["RAS_PARAMETERS"]

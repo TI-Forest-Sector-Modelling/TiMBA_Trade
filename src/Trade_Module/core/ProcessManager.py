@@ -59,7 +59,7 @@ class ProcessManager:
 
     def RAS_process(self, fao_df, bt_df):
         self.start_process("Beginn the RAS process")
-        
+
         merge_keys = ["Reporter","Partner", "Commodity", "Period"]
 
         ras_df = fao_df.merge(
@@ -83,8 +83,12 @@ class ProcessManager:
         fao_df = CalcManager(data=self.load_timba_process()).main().copy()
         fao_df = fao_df[["Reporter","Partner","Commodity","Period","X_q_o","M_q_p"]]
 
+        logger.info("")
+
         bt_df = self.load_baci_process()[["Reporter","Partner","Commodity","Period","Export_bilateral"]]
         bt_df["Export_bilateral"] = bt_df["Export_bilateral"] /1000
+
+        logger.info("")
 
         return self.RAS_process(fao_df=fao_df,bt_df=bt_df)
     

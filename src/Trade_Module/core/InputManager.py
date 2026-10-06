@@ -24,9 +24,6 @@ class InputManager:
 
         file = max(pkl_files, key=lambda f: f.stat().st_mtime)
 
-        logger.info(f"   Open pkl at: {path.resolve()}")
-        logger.info(f"   Name of TiMBA result file: {file.name}")
-
         with gzip.open(file, "rb") as pkl_file:
             obj = pickle.load(pkl_file)
 
