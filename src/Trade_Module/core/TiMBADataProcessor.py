@@ -1,11 +1,9 @@
+from src.Trade_Module.paramters.country_info import country_dict
+import src.Trade_Module.paramters.paramters as params
+
 import pandas as pd
 import numpy as np
 import xarray as xr
-
-from src.Trade_Module.paramters.country_info import country_dict
-import src.Trade_Module.paramters.paramters as params
-from src.Trade_Module.logic.CalculationManager import CalcManager
-
 import logging
 logger = logging.getLogger(__name__)
 
@@ -13,7 +11,6 @@ logger = logging.getLogger(__name__)
 class TiMBADataProcessor:
     def __init__(self, data):
         self.data = data
-        self.cm = CalcManager()
 
     def _rename_columns(self):
         self.data = self.data.rename(columns=params.COLUMN_MAPPING)   
@@ -134,6 +131,12 @@ class TiMBADataProcessor:
         )
         return array
 
+    @staticmethod
+    def _log_of_price_share(data):
+        with np.errstate(divide="ignore"):
+            data["P_share"] = np.log(data["P_p_o"] / data["P_p_p"])
+        return data
+
     def _build_dataset(self):
         self.dataset = xr.Dataset(
             {
@@ -151,7 +154,7 @@ class TiMBADataProcessor:
             }
         )
 
-        self.cm.log_of_price_share(data=self.dataset)
+        self._log_of_price_share(data=self.dataset)
         self._add_lags()
 
     def _add_lags(self):

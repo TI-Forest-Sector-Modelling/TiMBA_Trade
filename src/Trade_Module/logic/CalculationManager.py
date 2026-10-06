@@ -1,19 +1,11 @@
 import numpy as np
-
-from src.Trade_Module.core.OutputManager import OutputManager
-
-om = OutputManager()
+import pandas as pd
 
 
 class CalcManager:
-    def __init__(self):
+    def __init__(self, data:pd.DataFrame):
         self.AE = 1
-
-    @staticmethod
-    def log_of_price_share(data):
-        with np.errstate(divide="ignore"):
-            data["P_share"] = np.log(data["P_p_o"] / data["P_p_p"])
-        return data
+        self.data = data
 
     def _calc_price_share(self):
         df = self.data
@@ -51,8 +43,7 @@ class CalcManager:
     def _combined_effect(self):
         self.results["M_growth"] = self.results["LD_growth"] * self.results["P_share_growth"] ** (self.AE)
         
-    def main(self):
-        self._get_data()
+    def main(self)->pd.DataFrame:
         self._calc_price_share()
         self.clip_shares(cols=["P_share_growth"],lb_fix=0.5,ub_fix=2)
         self.clip_shares(cols=["LD_growth"])

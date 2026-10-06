@@ -7,13 +7,8 @@ logger = logging.getLogger(__name__)
 
 
 def main():
-    pm = ProcessManager()
-
-    timba_data = pm.load_timba_process()
-    baci_data = pm.load_baci_process()
-
-    print(timba_data)
-    print(baci_data)
+    ras_df = ProcessManager().main_process()
+    print(ras_df)
 
 
 if __name__ == "__main__":
