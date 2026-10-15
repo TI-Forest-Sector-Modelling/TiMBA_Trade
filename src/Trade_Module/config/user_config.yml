@@ -7,8 +7,8 @@ RAS_PARAMETERS:
   col_target_col: "M_q_p"
   bilateral_col: "Export_bilateral"
   output_dir: "ras_output"
-  max_iter: 10000
-  tol: 0.000000001
+  max_iter: 5000
+  tol: 0.00000001
   row_col: "RoW"
   cutoff: 0.01
   n_jobs: 4 # -1 = all CPU kernels

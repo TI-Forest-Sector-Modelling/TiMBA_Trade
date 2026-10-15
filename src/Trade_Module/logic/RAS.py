@@ -17,7 +17,6 @@ import numpy as np
 import pandas as pd
 from joblib import Parallel, delayed
 
-from src.Trade_Module.core.OutputManager import OutputManager
 from src.Trade_Module.utils.helper import get_ras_parameters
 
 import logging
@@ -41,7 +40,6 @@ class RAS:
 
     def __init__(self):
         self.__dict__.update(get_ras_parameters())
-        self.om = OutputManager()
 
     def fit(self, df):
         """

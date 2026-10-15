@@ -1,5 +1,6 @@
 import pandas as pd
 from pathlib import Path
+import pyarrow
 
 from src.Trade_Module.paramters.paths import OUTPUT_PATH
 
@@ -22,3 +23,8 @@ class OutputManager:
                 if i == max_attempts - 1:
                     raise
                 continue
+
+    def save_parquet(self, df, file_name):
+        file = Path(file_name + ".parquet")
+        df.to_parquet(OUTPUT_PATH / file) 
+        logger.info(f"Parquet saved at: {OUTPUT_PATH / Path(file)}")
