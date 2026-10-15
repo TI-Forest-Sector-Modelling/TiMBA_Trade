@@ -16,15 +16,27 @@ class RAS:
 
     def fit(self, df):
         groups = list(df.groupby(self.commodity_col, sort=True))
-        logger.info(f" Start RAS for {len(groups)} commodities in '{self.output_dir}'")
+        logger.debug(f"  Start RAS for {len(groups)} commodities in '{self.output_dir}'")
  
         out = Parallel(n_jobs=self.n_jobs)(
             delayed(self._fit_commodity)(c, g) for c, g in groups
         )
+
         results, diagnostics = ([o[i] for o in out] for i in (0, 1))
+
+        for d in diagnostics:
+            if d["converged"]:
+                logger.debug(
+                    f"  Commodity: {d['Commodity']}; Converging after {d['iterations']} "
+                    f"iterations (error = {d['max_row_error']:.2e})"
+                )
+            else:
+                logger.warning(
+                    f"  Commodity: {d['Commodity']}; Max. iterations ({d['iterations']}) "
+                    f"reached before converging ({d['max_row_error']:.2e} > error tolerance of {self.tol:.2e})"
+                )
         combined_res = pd.concat(results, ignore_index=True)
-        self.om.save_df(df=pd.DataFrame(diagnostics), file_name="RAS_diagnostics")
-        self.om.save_df(df=pd.DataFrame(combined_res), file_name="RAS_results")
+
         return combined_res
  
     def _fit_commodity(self, commodity, df):
@@ -75,11 +87,13 @@ class RAS:
             tc[R] += imb
         elif imb < -tol:
             tr[R] -= imb
- 
+
         if tr[R] > tol and not adj[R].any():
-            T[R, :n], adj[R, :n] = 1.0, True
+            T[R, :n] = cpos[:n].astype(float)
+            adj[R, :n] = cpos[:n]
         if tc[R] > tol and not adj[:, R].any():
-            T[:n, R], adj[:n, R] = 1.0, True
+            T[:n, R] = rpos[:n].astype(float)
+            adj[:n, R] = rpos[:n]
  
         # validation
         for target, ax, label in ((tr, 1, "Reporter"), (tc, 0, "Partner")):
@@ -105,7 +119,7 @@ class RAS:
         non_row = np.arange(N) != R
         out_vals = np.where(np.isnan(orig) & np.outer(non_row, non_row), np.nan, T_ras)
         result = pd.DataFrame({
-            rc: rr, pc: cc, self.commodity_col: commodity, self.period_col: 0,
+            rc: rr, pc: cc, self.commodity_col: commodity, self.period_col: df[self.period_col].iloc[0],
             self.row_target_col: np.repeat(tr, N), self.col_target_col: np.tile(tc, N),
             bc: out_vals.ravel(),
             "Export_bilateral_original": orig.ravel(),
@@ -146,9 +160,7 @@ class RAS:
             rs = T.sum(axis=1)
             err = np.abs(rs - tr).max()
             if err < tol:
-                logger.info(f" Commodity: {commodity}; Converging after {i} iterations (error = {err:.2e})")
                 return T, i, True
  
-        logger.warning(f" Commodity: {commodity}; Max. iterations ({self.max_iter}) reached before converging ({err:.2e} > error tolerance of {tol:.2e})")
         return T, self.max_iter, False
  

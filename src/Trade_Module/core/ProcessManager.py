@@ -57,38 +57,51 @@ class ProcessManager:
 
         return baci_data
 
-    def RAS_process(self, fao_df, bt_df):
-        self.start_process("Beginn the RAS process")
-
-        merge_keys = ["Reporter","Partner", "Commodity", "Period"]
-
-        ras_df = fao_df.merge(
-            bt_df,
-            on=merge_keys,
-            how="left"
-        )
-
-        ras_df = ras_df[ras_df.Period==0]
-        ras_df = ras_df[ras_df['Commodity'] != 89]
-        ras_df = ras_df[ras_df['Commodity'] != 90]
-        ras_df = ras_df[ras_df['Commodity'] != 93]
-        
-        ras_result = RAS().fit(ras_df)
-
-        self.end_process("RAS process done")
-
-        return ras_result[["Reporter", "Partner",  "Commodity",  "Period",  "Export_bilateral"]]
-
     def main_process(self):
         fao_df = CalcManager(data=self.load_timba_process()).main().copy()
-        fao_df = fao_df[["Reporter","Partner","Commodity","Period","X_q_o","M_q_p"]]
-
-        logger.info("")
+        fao_df = fao_df[["Reporter","Partner","Commodity","Period","X_q_o","M_q_p","P_share_growth"]]
 
         bt_df = self.load_baci_process()[["Reporter","Partner","Commodity","Period","Export_bilateral"]]
         bt_df["Export_bilateral"] = bt_df["Export_bilateral"] /1000
 
-        logger.info("")
+        self.start_process(f"Beginn the RAS process")
 
-        return self.RAS_process(fao_df=fao_df,bt_df=bt_df)
+        fao_df = fao_df[fao_df['Commodity'] != 89]
+        fao_df = fao_df[fao_df['Commodity'] != 90]
+        fao_df = fao_df[fao_df['Commodity'] != 93]
+
+        bt_df = bt_df[bt_df['Commodity'] != 89]
+        bt_df = bt_df[bt_df['Commodity'] != 90]
+        bt_df = bt_df[bt_df['Commodity'] != 93]
+        
+        merge_keys = ["Reporter","Partner", "Commodity", "Period"]
+        bt_result = pd.DataFrame()
+        for period in fao_df.Period.unique():
+            logger.info(f" Period: {period}")
+            fp = fao_df[fao_df.Period==period]
+
+            bt_df = bt_df[["Reporter","Partner","Commodity","Export_bilateral"]]
+            bt_df["Period"]=period
+            bt_df = bt_df.drop_duplicates()
+            bt_df = bt_df.dropna().reset_index(drop=True)
+            bt_df = bt_df[bt_df['Reporter'] != 'RoW']
+            bt_df = bt_df[bt_df['Partner'] != 'RoW']
+
+            ras_df = fp.merge(
+                bt_df,
+                on=merge_keys,
+                how="left"
+            )
+            ras_df["Export_bilateral"] = ras_df["Export_bilateral"] * ras_df["P_share_growth"]
+
+            bt_df = RAS().fit(ras_df)
+            bt_result = pd.concat([bt_result,bt_df]).reset_index(drop=True)
+
+        #bt_result.to_csv("reslts.csv")
+        #bt_result_usa = bt_result[bt_result.Partner=="USA"]
+        #bt_result_usa.to_csv("reslts_x_to_usa.csv")
+
+        self.end_process(f"End of RAS process")
+
+        return bt_result
     

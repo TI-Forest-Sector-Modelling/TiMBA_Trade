@@ -1,21 +1,23 @@
 import logging
 from src.Trade_Module.paramters.paths import LOG_PATH
 
+
 def setup_logging():
-    logging.basicConfig(
-        level=logging.INFO,
-        format=(
-            "%(asctime)s | "
-            "%(levelname)-1s | "
-            "%(message)s"
-        ),
+    fmt = logging.Formatter(
+        "%(asctime)s | %(levelname)-8s | %(message)s",
         datefmt="%Y-%m-%d %H:%M",
-        handlers=[
-            logging.StreamHandler(),
-            logging.FileHandler(     
-                LOG_PATH,
-                mode="w",
-                encoding="utf-8",
-            ),
-        ],
     )
+
+    console = logging.StreamHandler()
+    console.setLevel(logging.INFO)
+    console.setFormatter(fmt)
+
+    LOG_PATH.parent.mkdir(parents=True, exist_ok=True)
+    file = logging.FileHandler(LOG_PATH, mode="w", encoding="utf-8")
+    file.setLevel(logging.DEBUG)
+    file.setFormatter(fmt)
+
+    logging.basicConfig(level=logging.DEBUG, handlers=[console, file], force=True)
+
+    for name in ("joblib", "matplotlib", "PIL", "numba", "urllib3"):
+        logging.getLogger(name).setLevel(logging.WARNING)
