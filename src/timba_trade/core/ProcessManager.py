@@ -1,9 +1,9 @@
-from src.Trade_Module.core.TiMBADataProcessor import TiMBADataProcessor
-from src.Trade_Module.core.BACIDataProcessor import BACIProcessor
-from src.Trade_Module.core.InputManager import InputManager
-from src.Trade_Module.logic.CalculationManager import CalcManager
-from src.Trade_Module.logic.RAS import RAS
-from src.Trade_Module.core.OutputManager import OutputManager
+from src.timba_trade.core.TiMBADataProcessor import TiMBADataProcessor
+from src.timba_trade.core.BACIDataProcessor import BACIProcessor
+from src.timba_trade.core.InputManager import InputManager
+from src.timba_trade.logic.CalculationManager import CalcManager
+from src.timba_trade.logic.RAS import RAS
+from src.timba_trade.core.OutputManager import OutputManager
 
 import time
 import pandas as pd

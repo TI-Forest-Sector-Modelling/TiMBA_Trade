@@ -17,7 +17,7 @@ import numpy as np
 import pandas as pd
 from joblib import Parallel, delayed
 
-from src.Trade_Module.utils.helper import get_ras_parameters
+from src.timba_trade.utils.helper import get_ras_parameters
 
 import logging
 logger = logging.getLogger(__name__)

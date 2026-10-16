@@ -1,9 +1,8 @@
-from src.Trade_Module.core.InputManager import InputManager
-from src.Trade_Module.paramters.hscodes import timba_commodity_list, timba_comcode
-import src.Trade_Module.paramters.paramters as p
-from src.Trade_Module.utils.helper import hs_to_fao_dict
-from src.Trade_Module.utils.logger import setup_logging
-from src.Trade_Module.logic.RAS import RAS
+from src.timba_trade.core.InputManager import InputManager
+from src.timba_trade.paramters.hscodes import timba_commodity_list, timba_comcode
+import src.timba_trade.paramters.paramters as p
+from src.timba_trade.utils.helper import hs_to_fao_dict
+from src.timba_trade.utils.logger import setup_logging
 
 import logging
 import pandas as pd

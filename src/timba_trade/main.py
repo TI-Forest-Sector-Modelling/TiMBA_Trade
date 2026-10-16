@@ -1,5 +1,5 @@
-from src.Trade_Module.core.ProcessManager import ProcessManager
-from src.Trade_Module.utils.logger import setup_logging
+from src.timba_trade.core.ProcessManager import ProcessManager
+from src.timba_trade.utils.logger import setup_logging
 
 import pandas as pd
 import logging

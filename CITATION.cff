@@ -2,7 +2,7 @@
 # Visit https://bit.ly/cffinit to generate yours today!
 
 cff-version: 1.2.0
-title: Forest Sectort Trade Module
+title: Trade Module of TiMBA
 type: software
 authors:
   - given-names: Christian
@@ -11,14 +11,10 @@ authors:
     affiliation: Thünen Institue of Forestry
     orcid: 'https://orcid.org/0000-0001-6600-570X'
 abstract: |-
-  This package can be used as a toolkit for analysing TiMBA results after simulation.
-  The package provides a dashboard which let the user interact with the main TiMBA results. 
-  This includes the development of prices, production, consumption, and trade of forest products 
-  as well as forest stock development. It also gives information about historic developments as 
-  reported by the FAOSTAT. In principle, the toolkit can be easily adapted and used for the 
-  analysis of any forest sector model as long as the data resembles the format of the TiMBA output. 
+  ...
 keywords:
   - research
+  - bilateral trade
   - Forest sector model
   - partial equilibrium model
   - optimization
