@@ -1,9 +1,9 @@
-from src.timba_trade.core.TiMBADataProcessor import TiMBADataProcessor
-from src.timba_trade.core.BACIDataProcessor import BACIProcessor
-from src.timba_trade.core.InputManager import InputManager
-from src.timba_trade.logic.CalculationManager import CalcManager
-from src.timba_trade.logic.RAS import RAS
-from src.timba_trade.core.OutputManager import OutputManager
+from timba_trade.core.TiMBADataProcessor import TiMBADataProcessor
+from timba_trade.core.BACIDataProcessor import BACIProcessor
+from timba_trade.core.InputManager import InputManager
+from timba_trade.logic.CalculationManager import CalcManager
+from timba_trade.logic.RAS import RAS
+from timba_trade.core.OutputManager import OutputManager
 
 import time
 import pandas as pd
@@ -60,7 +60,7 @@ class ProcessManager:
 
         return baci_data
 
-    def main_process(self, td:pd.DataFrame|None)->pd.DataFrame:
+    def main_process(self, td:pd.DataFrame|None, save_file:bool=True)->pd.DataFrame:
         timba_data = self.load_timba_process(data=td)
         fao_df = CalcManager(data=timba_data).main().copy()
         fao_df = fao_df[["Reporter","Partner","Commodity","Period","X_q_o","M_q_p","P_share_growth"]]
@@ -96,10 +96,11 @@ class ProcessManager:
             bt_df = RAS().fit(ras_df)
             bt_result = pd.concat([bt_result,bt_df]).reset_index(drop=True)
 
-        self.om.save_parquet(
-            df=bt_result,
-            file_name="TiMBA_bilateral_results"
-        )
+        if save_file:
+            self.om.save_parquet(
+                df=bt_result,
+                file_name="TiMBA_bilateral_results"
+            )
 
         self.end_process(f"End of RAS process")
 

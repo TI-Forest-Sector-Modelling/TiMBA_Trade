@@ -1,8 +1,8 @@
-from src.timba_trade.core.InputManager import InputManager
-from src.timba_trade.paramters.hscodes import timba_commodity_list, timba_comcode
-import src.timba_trade.paramters.paramters as p
-from src.timba_trade.utils.helper import hs_to_fao_dict
-from src.timba_trade.utils.logger import setup_logging
+from timba_trade.core.InputManager import InputManager
+from timba_trade.paramters.hscodes import timba_commodity_list, timba_comcode
+import timba_trade.paramters.paramters as p
+from timba_trade.utils.helper import hs_to_fao_dict
+from timba_trade.utils.logger import setup_logging
 
 import logging
 import pandas as pd

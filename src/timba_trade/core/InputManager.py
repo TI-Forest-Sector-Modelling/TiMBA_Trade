@@ -1,4 +1,4 @@
-from src.timba_trade.paramters.paths import INPUT_PATH, BITRADEPATH
+from timba_trade.paramters.paths import INPUT_PATH, BITRADEPATH
 
 import pandas as pd
 import pickle

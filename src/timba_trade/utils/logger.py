@@ -1,5 +1,5 @@
 import logging
-from src.timba_trade.paramters.paths import LOG_PATH
+from timba_trade.paramters.paths import LOG_PATH
 
 
 def setup_logging():

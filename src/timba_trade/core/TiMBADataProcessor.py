@@ -1,5 +1,5 @@
-from src.timba_trade.paramters.country_info import country_dict
-import src.timba_trade.paramters.paramters as params
+from timba_trade.paramters.country_info import country_dict
+import timba_trade.paramters.paramters as params
 
 import pandas as pd
 import numpy as np

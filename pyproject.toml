@@ -41,3 +41,6 @@ include = ["timba_trade*"]
 [project.urls]
 Repository = "https://github.com/TI-Forest-Sector-Modelling/TiMBA_Trade"
 Issues = "https://github.com/TI-Forest-Sector-Modelling/TiMBA_Trade/issues"
+
+[project.scripts]
+trade_module = "timba_trade.cli.cli:cli"

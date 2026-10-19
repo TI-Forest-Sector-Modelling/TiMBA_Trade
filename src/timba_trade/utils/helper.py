@@ -1,5 +1,5 @@
-from src.timba_trade.paramters.hscodes import timba_commodity_list, timba_comcode
-from src.timba_trade.paramters.paths import CONFIG_PATH
+from timba_trade.paramters.hscodes import timba_commodity_list, timba_comcode
+from timba_trade.paramters.paths import CONFIG_PATH
 
 import yaml
 

@@ -2,7 +2,7 @@ import pandas as pd
 from pathlib import Path
 import pyarrow
 
-from src.timba_trade.paramters.paths import OUTPUT_PATH
+from timba_trade.paramters.paths import OUTPUT_PATH
 
 import logging
 logger = logging.getLogger(__name__)
