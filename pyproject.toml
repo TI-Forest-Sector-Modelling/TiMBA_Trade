@@ -39,5 +39,5 @@ where = ["src"]
 include = ["timba_trade*"]
 
 [project.urls]
-Repository = "https://github.com/DEINE-ORG/DEIN-REPO"
-Issues = "https://github.com/DEINE-ORG/DEIN-REPO/issues"
+Repository = "https://github.com/TI-Forest-Sector-Modelling/TiMBA_Trade"
+Issues = "https://github.com/TI-Forest-Sector-Modelling/TiMBA_Trade/issues"
