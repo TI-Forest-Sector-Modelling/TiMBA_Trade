@@ -1,22 +1,11 @@
 [build-system]
-requires = ["setuptools>=61.0"]
+requires = ["setuptools>=77.0.3"]
 build-backend = "setuptools.build_meta"
 
-[tool.setuptools.packages.find]
-include = ["timba-trade*"]
-
-[tool.setuptools]
-include-package-data = true
-
-[tool.setuptools.package-data]
-"timba-trade" = ["assets/*.css", "assets/*.js", "assets/*.png"]
-
 [project]
-name = "timba-trade"
+name = "TiMBA_Trade"
 version = "0.1.0"
-description = """
-An add-on for TiMBA to obtain bilateral Trade from scenario output.
-"""
+description = "An add-on for TiMBA to obtain bilateral Trade from scenario output."
 readme = "README.md"
 requires-python = ">=3.11"
 license = "AGPL-3.0-or-later"
@@ -38,5 +27,17 @@ dependencies = [
 [project.optional-dependencies]
 dev = [
     "pytest==8.3.5",
-    "pytest-cov==6.2.1"
+    "pytest-cov==6.2.1",
 ]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["timba_trade*"]
+
+[project.urls]
+Repository = "https://github.com/DEINE-ORG/DEIN-REPO"
+Issues = "https://github.com/DEINE-ORG/DEIN-REPO/issues"
