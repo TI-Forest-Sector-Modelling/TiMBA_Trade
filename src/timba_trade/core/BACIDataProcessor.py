@@ -7,13 +7,11 @@ from timba_trade.utils.logger import setup_logging
 import logging
 import pandas as pd
 
-setup_logging()
 logger = logging.getLogger(__name__)
 
 
 class BACIProcessor:
-    def __init__(self, df:pd.DataFrame, year: int = 2023,):
-        self.im = InputManager()
+    def __init__(self, df:pd.DataFrame, year: int = 2023):
         self.commodity_list = timba_commodity_list
         self.year = year
         self.df = df

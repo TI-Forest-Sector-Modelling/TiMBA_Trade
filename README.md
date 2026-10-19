@@ -2,7 +2,7 @@
 
 -----------------
 
-# Trade Module of TiMBA
+# Bilateral Trade Module of TiMBA
 
 This is an additional module for TiMBA that computes bilateral trade flows per commodity and balances them to the export and import totals. BACI trade data serves as the starting point for bilateral trade; the balancing is done with **RAS** (iterative proportional fitting).
 

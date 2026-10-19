@@ -6,6 +6,7 @@ from timba_trade.logic.RAS import RAS
 from timba_trade.core.OutputManager import OutputManager
 
 import time
+from pathlib import Path
 import pandas as pd
 import logging
 logger = logging.getLogger(__name__)
@@ -13,7 +14,7 @@ logger = logging.getLogger(__name__)
 
 class ProcessManager:
 
-    def __init__(self):
+    def __init__(self, folder_path:Path|None):
         self.data = None
         self.country_data = None
         self.partner_data = None
@@ -23,8 +24,8 @@ class ProcessManager:
         self.dataset = None
         self.result = None
         self.start_time = None
-        self.im = InputManager()
-        self.om = OutputManager()
+        self.im = InputManager(folder_path=folder_path)
+        self.om = OutputManager(folder_path=folder_path)
 
     def start_process(self, process_description:str):
         self.start_time = time.time()

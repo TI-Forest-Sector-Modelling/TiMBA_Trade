@@ -1,5 +1,6 @@
-from timba_trade.paramters.paths import INPUT_PATH, BITRADEPATH
+from timba_trade.paramters.paths import BACI_FILE, INPUT_DATA_PATH, PACKAGEDIR
 
+from pathlib import Path
 import pandas as pd
 import pickle
 import gzip
@@ -9,17 +10,16 @@ logger = logging.getLogger(__name__)
 
 
 class InputManager:
-    def __init__(self):
-        pass
+    def __init__(self, folder_path:Path|None):
+        pckdir = PACKAGEDIR if folder_path is None else folder_path
+        self.folder_path = pckdir / INPUT_DATA_PATH
 
-    @staticmethod
-    def load_timba_results():
-        path = INPUT_PATH
-        pkl_files = list(path.glob("*.pkl"))
+    def load_timba_results(self):
+        pkl_files = list(self.folder_path.glob("*.pkl"))
 
         if not pkl_files:
             raise FileNotFoundError(
-                f"   No .pkl file found at: {path.resolve()}"
+                f"   No .pkl file found at: {self.folder_path.resolve()}"
             )
 
         file = max(pkl_files, key=lambda f: f.stat().st_mtime)
@@ -29,7 +29,7 @@ class InputManager:
 
         return obj["data_periods"]
 
-    @staticmethod
-    def load_baci_data():
+    def load_baci_data(self):
+        BITRADEPATH = self.folder_path / BACI_FILE
         return pd.read_parquet(BITRADEPATH)
 
