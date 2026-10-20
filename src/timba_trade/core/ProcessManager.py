@@ -42,10 +42,16 @@ class ProcessManager:
             f"{process_description} in {elapsed_time:.1f} seconds"
         )
 
-    def load_timba_process(self, data:pd.DataFrame|None)->pd.DataFrame:
+    def load_timba_process(
+            self, 
+            data:pd.DataFrame|None,
+            scen_name:str|None
+    )->pd.DataFrame:
+        
         self.start_process("Beginn to load TiMBA data")
+        self.scen_name = scen_name
         if data is None:
-            data = self.im.load_timba_results()
+            data, self.scen_name = self.im.load_timba_results()
         tdp = TiMBADataProcessor(data)
         timba_data = tdp.main()
         self.end_process("TiMBA data loaded")
@@ -61,12 +67,35 @@ class ProcessManager:
 
         return baci_data
 
-    def main_process(self, td:pd.DataFrame|None, save_file:bool=True)->pd.DataFrame:
-        timba_data = self.load_timba_process(data=td)
+    def main_process(
+            self, 
+            td:pd.DataFrame|None, 
+            scen_name:str|None, 
+            save_file:bool=True
+    )->pd.DataFrame:
+        
+        timba_data = self.load_timba_process(
+            data=td, 
+            scen_name=scen_name
+        )
         fao_df = CalcManager(data=timba_data).main().copy()
-        fao_df = fao_df[["Reporter","Partner","Commodity","Period","X_q_o","M_q_p","P_share_growth"]]
+        fao_df = fao_df[[
+            "Reporter",
+            "Partner",
+            "Commodity",
+            "Period",
+            "X_q_o",
+            "M_q_p",
+            "P_share_growth"
+        ]]
 
-        bt_df = self.load_baci_process()[["Reporter","Partner","Commodity","Period","Export_bilateral"]]
+        bt_df = self.load_baci_process()[[
+            "Reporter",
+            "Partner",
+            "Commodity",
+            "Period",
+            "Export_bilateral"
+        ]]
         bt_df["Export_bilateral"] /= 1000
 
         self.start_process(f"Beginn the RAS process")
@@ -80,7 +109,13 @@ class ProcessManager:
             logger.info(f" Period: {period}")
             fp = fao_df[fao_df.Period==period]
 
-            bt_df = bt_df[["Reporter","Partner","Commodity","Export_bilateral"]]
+            bt_df = bt_df[[
+                "Reporter",
+                "Partner",
+                "Commodity",
+                "Export_bilateral"
+            ]]
+
             bt_df["Period"]=period
             bt_df = bt_df.drop_duplicates()
             bt_df = bt_df.dropna().reset_index(drop=True)
@@ -100,7 +135,7 @@ class ProcessManager:
         if save_file:
             self.om.save_parquet(
                 df=bt_result,
-                file_name="TiMBA_bilateral_results"
+                file_name=f"BilateralTrade_{self.scen_name}"
             )
 
         self.end_process(f"End of RAS process")

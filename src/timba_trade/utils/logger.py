@@ -3,7 +3,7 @@ import logging
 from datetime import datetime
 from pathlib import Path
 
-from timba_trade.paramters.paths import LOG_PATH, PACKAGEDIR, init_path
+from timba_trade.paramters.paths import OUTPUT_PATH, PACKAGEDIR, init_path
 
 
 def setup_logging(folder_path: Path | None = None) -> None:
@@ -19,7 +19,7 @@ def setup_logging(folder_path: Path | None = None) -> None:
     )
 
     base_dir = PACKAGEDIR if folder_path is None else Path(folder_path)
-    log_dir = base_dir / LOG_PATH
+    log_dir = base_dir / OUTPUT_PATH
     init_path(log_dir)
 
     console = logging.StreamHandler()

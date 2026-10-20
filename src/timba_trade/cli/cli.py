@@ -1,5 +1,6 @@
 import click
 import pandas as pd
+from pathlib import Path
 
 from timba_trade.main import main
 
@@ -15,14 +16,27 @@ def cli():
     '-S', '--save_file', 
     default=True, 
     show_default=True, 
-    required=True,
+    required=False,
     help="If True output will be saved as parquet file."
 )
 
-def bitrade(save_file:bool):
-    """Download ISIMIP data for a model."""
+@click.option(
+    '-P', '--folder_path', 'folder_path', 
+    required=False, 
+    type=click.Path(
+        file_okay=False, 
+        writable=True, 
+        path_type=Path
+    ), 
+    default=None,
+    help="Path to the data directory containing the Input and Output folders. If omitted, the data directory inside the package directory is used."
+)
+
+def run(save_file:bool, folder_path:Path):
+    """Run the main script."""
     res = main(
         timba_data=None, 
+        scen_name=None,
         save_file=save_file,
-        
+        folder_path=folder_path,
     )

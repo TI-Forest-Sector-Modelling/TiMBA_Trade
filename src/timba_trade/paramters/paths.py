@@ -12,7 +12,4 @@ INPUT_DATA_PATH = Path(r"data/input/")
 CONFIG_PATH = PACKAGEDIR / Path(r"config/user_config.yml")
 BACI_FILE = "BACI_DATA_as_vector.parquet"
 
-OUTPUT_PATH = Path(r"data/output/")
-LOG_PATH = Path(r"data/output/logs/")
-
-LOG_PATH = LOG_PATH / Path(f"{timestamp}.log")
+OUTPUT_PATH = Path(f"data/output/{timestamp}_bilateral_trade_results/")

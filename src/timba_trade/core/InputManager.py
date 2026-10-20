@@ -23,11 +23,13 @@ class InputManager:
             )
 
         file = max(pkl_files, key=lambda f: f.stat().st_mtime)
+        scen_name = str(file.stem).split("Sc_")[1]
+        logger.info(f"Read scenario: {scen_name}")
 
         with gzip.open(file, "rb") as pkl_file:
             obj = pickle.load(pkl_file)
 
-        return obj["data_periods"]
+        return obj["data_periods"], scen_name
 
     def load_baci_data(self):
         BITRADEPATH = self.folder_path / BACI_FILE
