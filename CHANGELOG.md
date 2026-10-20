@@ -1,6 +1,11 @@
 
 # Changelog
 
+## [0.1.4] - 2026-10-20
+
+### Fixed
+-Adapt TiMBA main model package dependencies to allow compatablity between main module and the submodule TiMBA_Trade
+
 ## [0.1.3] - 2026-10-20
 
 ### Fixed
