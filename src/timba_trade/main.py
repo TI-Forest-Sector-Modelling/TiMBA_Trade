@@ -4,6 +4,7 @@ from timba_trade.utils.logger import setup_logging
 import pandas as pd
 from pathlib import Path
 import logging
+import warnings
 
 def main(
         timba_data:pd.DataFrame|None=None, 
@@ -12,6 +13,7 @@ def main(
         folder_path: Path|None=None,
 )->pd.DataFrame:
 
+    warnings.filterwarnings("ignore", category=pd.errors.SettingWithCopyWarning)
     setup_logging(folder_path=folder_path)
     
     pm = ProcessManager(folder_path=folder_path)
