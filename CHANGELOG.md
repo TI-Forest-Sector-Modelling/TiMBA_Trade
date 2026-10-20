@@ -1,6 +1,12 @@
 
 # Changelog
 
+## [0.1.3] - 2026-10-20
+
+### Fixed
+- Included configuration files in the published Python package.
+
+
 ## [0.1.2] - 2026-10-20
 
 ### Fixed

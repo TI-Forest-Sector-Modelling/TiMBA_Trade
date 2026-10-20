@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "TiMBA_Trade"
-version = "0.1.2"
+version = "0.1.3"
 description = "An add-on for TiMBA to obtain bilateral Trade from scenario output."
 readme = "README.md"
 requires-python = ">=3.11"
@@ -33,6 +33,9 @@ dev = [
 [tool.setuptools]
 package-dir = {"" = "src"}
 include-package-data = true
+
+[tool.setuptools.package-data]
+timba_trade = ["config/**/*", "config/*"]
 
 [tool.setuptools.packages.find]
 where = ["src"]
