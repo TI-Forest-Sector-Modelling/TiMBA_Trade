@@ -2,7 +2,7 @@
 
 -----------------
 
-# Trade Module of TiMBA
+# Bilateral Trade Module of TiMBA
 
 This is an additional module for TiMBA that computes bilateral trade flows per commodity and balances them to the export and import totals. BACI trade data serves as the starting point for bilateral trade; the balancing is done with **RAS** (iterative proportional fitting).
 
@@ -31,20 +31,44 @@ The module can be executed in two ways:
    python -m src.timba_trade.main
    ```
 
-2. **Use the command-line interface (CLI)** after installing the package:
+## 2. Run the Module via the Command-Line Interface (CLI)
 
-   ```bash
-   trade_module run
-   ```
-   
-   The CLI provides one optional flag, `-S` / `--save_file`. When enabled, it saves the trade module's output as a Parquet file.
-   
-   For example:
-   ```bash
-   trade_module run -S True
-   ```
+After installing the package, you can run the trade module directly from the command line:
 
-   If the flag is omitted, the output is saved as a Parquet file.
+```bash
+trade_module run
+```
+
+The CLI supports the following optional arguments:
+
+- `-S` / `--save_file`: Controls whether the output is saved as a Parquet file. Defaults to `True`.
+- `-P` / `--folder_path`: Specifies the directory containing the input data. The output files and logs are also saved to this directory.
+
+**Example:**
+
+```bash
+trade_module run -S True -P "C:\your_data_folder"
+```
+
+**Default behavior:**
+
+- If `--save_file` is omitted, the output is automatically saved as a Parquet file.
+- If `--folder_path` is omitted, the module uses its package directory as the default location for input data, output files, and logs.
+
+**Note:** Replace `C:\your_data_folder` with the path to your actual data directory.
+
+## Expected folder structure
+
+The specified `folder_path` must contain the following files in the indicated directory structure:
+
+```text
+your_data_folder/
+├── data/
+│   └── input/
+│       └── BACI_DATA_as_vector.parquet
+│       └── timba_result.pkl
+```
+
 
 ## Logging
 
