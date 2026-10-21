@@ -1,6 +1,21 @@
 
 # Changelog
 
+## [0.1.5] - 2026-10.21
+
+### Added
+- Support for specifying a custom BACI data filename.
+
+### Changed
+- Reorganized output paths for bilateral trade results.
+- Updated log filenames to identify bilateral trade logs.
+- Improved input and output path handling.
+
+### Fixed
+- Ensured logging resources are properly closed after processing.
+- Suppressed pandas `SettingWithCopyWarning` during execution.
+  
+
 ## [0.1.4] - 2026-10-20
 
 ### Fixed
