@@ -29,7 +29,7 @@ class InputManager:
 
         file = max(pkl_files, key=lambda f: f.stat().st_mtime)
         scen_name = str(file.stem).split("Sc_")[1]
-        logger.info(f"Read scenario: {scen_name}")
+        logger.info(f" Load following scenario: {scen_name}")
 
         with gzip.open(file, "rb") as pkl_file:
             obj = pickle.load(pkl_file)
@@ -38,6 +38,6 @@ class InputManager:
 
     def load_baci_data(self):
         BITRADEPATH = self.folder_path / self.baci_file
-        logger.info(f"Read scenario: {self.baci_file}")
+        logger.info(f" Load following file: {self.baci_file}")
         return pd.read_parquet(BITRADEPATH)
 
