@@ -2,7 +2,7 @@ import pandas as pd
 from pathlib import Path
 import pyarrow
 
-from timba_trade.paramters.paths import OUTPUT_PATH, PACKAGEDIR, init_path
+from timba_trade.paramters.paths import OUTPUT_PATH, PACKAGEDIR, init_path, RESPATH
 
 import logging
 logger = logging.getLogger(__name__)
@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 class OutputManager:
     def __init__(self, folder_path:Path|None):
         pckdir = PACKAGEDIR if folder_path is None else folder_path
-        self.folder_path = pckdir / OUTPUT_PATH
+        self.folder_path = pckdir / OUTPUT_PATH / RESPATH
         init_path(self.folder_path)
 
     def save_df(self, df, file_name, max_attempts=10):

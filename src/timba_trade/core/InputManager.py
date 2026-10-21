@@ -10,9 +10,14 @@ logger = logging.getLogger(__name__)
 
 
 class InputManager:
-    def __init__(self, folder_path:Path|None):
+    def __init__(
+            self, 
+            folder_path:Path|None,
+            baci_file_name:Path|None,
+    ):
         pckdir = PACKAGEDIR if folder_path is None else folder_path
         self.folder_path = pckdir / INPUT_DATA_PATH
+        self.baci_file = BACI_FILE if baci_file_name is None else baci_file_name
 
     def load_timba_results(self):
         pkl_files = list(self.folder_path.glob("*.pkl"))
@@ -32,6 +37,7 @@ class InputManager:
         return obj["data_periods"], scen_name
 
     def load_baci_data(self):
-        BITRADEPATH = self.folder_path / BACI_FILE
+        BITRADEPATH = self.folder_path / self.baci_file
+        logger.info(f"Read scenario: {self.baci_file}")
         return pd.read_parquet(BITRADEPATH)
 

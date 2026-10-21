@@ -10,19 +10,25 @@ def main(
         timba_data:pd.DataFrame|None=None, 
         scen_name:str|None=None,
         save_file:bool=True,
-        folder_path: Path|None=None,
+        folder_path:Path|None=None,
+        baci_file_name:Path|None=None,
 )->pd.DataFrame:
 
     warnings.filterwarnings("ignore", category=pd.errors.SettingWithCopyWarning)
     setup_logging(folder_path=folder_path)
     
-    pm = ProcessManager(folder_path=folder_path)
+    pm = ProcessManager(
+        folder_path=folder_path,
+        baci_file_name=baci_file_name,
+    )
 
     ras_df = pm.main_process(
         td=timba_data,
         save_file=save_file,
         scen_name=scen_name,
     )
+
+    logging.shutdown()
 
     return ras_df
 
@@ -31,5 +37,6 @@ if __name__ == "__main__":
     data = main(
         save_file=False,
         folder_path=None,
+        baci_file_name=None,
         scen_name=None,
     )

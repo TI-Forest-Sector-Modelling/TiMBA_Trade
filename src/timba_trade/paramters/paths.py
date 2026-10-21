@@ -10,6 +10,8 @@ PACKAGEDIR = Path(__file__).parent.parent
 
 INPUT_DATA_PATH = Path(r"data/input/")
 CONFIG_PATH = PACKAGEDIR / Path(r"config/user_config.yml")
-BACI_FILE = "BACI_DATA_as_vector.parquet"
+BACI_FILE = Path(r"BACI_DATA_as_vector.parquet")
 
-OUTPUT_PATH = Path(f"data/output/{timestamp}_bilateral_trade_results/")
+OUTPUT_PATH = Path(f"data/output/")
+LOGSPATH = Path("logs")
+RESPATH = Path("data")

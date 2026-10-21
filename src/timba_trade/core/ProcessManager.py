@@ -14,7 +14,11 @@ logger = logging.getLogger(__name__)
 
 class ProcessManager:
 
-    def __init__(self, folder_path:Path|None):
+    def __init__(
+            self, 
+            folder_path:Path|None,
+            baci_file_name:Path|None,
+    ):
         self.data = None
         self.country_data = None
         self.partner_data = None
@@ -24,7 +28,10 @@ class ProcessManager:
         self.dataset = None
         self.result = None
         self.start_time = None
-        self.im = InputManager(folder_path=folder_path)
+        self.im = InputManager(
+            folder_path=folder_path,
+            baci_file_name=baci_file_name,
+        )
         self.om = OutputManager(folder_path=folder_path)
 
     def start_process(self, process_description:str):
