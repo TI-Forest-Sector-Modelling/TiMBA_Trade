@@ -1,4 +1,4 @@
-from timba_trade.paramters.paths import BACI_FILE, INPUT_DATA_PATH, PACKAGEDIR
+from timba_trade.paramters.paths import SCENARIO_DIR, BACI_DIR, BACI_FILE
 
 from pathlib import Path
 import pandas as pd
@@ -10,21 +10,17 @@ logger = logging.getLogger(__name__)
 
 
 class InputManager:
-    def __init__(
-            self, 
-            folder_path:Path|None,
-            baci_file_name:Path|None,
-    ):
-        pckdir = PACKAGEDIR if folder_path is None else folder_path
-        self.folder_path = pckdir / INPUT_DATA_PATH
-        self.baci_file = BACI_FILE if baci_file_name is None else baci_file_name
+    def __init__(self, path_dict:dict):
+        self.scen_dir = SCENARIO_DIR if path_dict["SCENARIO_DIR"] is None else path_dict["SCENARIO_DIR"]
+        self.baci_dir = BACI_DIR if path_dict["BACI_DIR"] is None else path_dict["BACI_DIR"]
+        self.baci_file_name = BACI_FILE if path_dict["baci_file_name"] is None else path_dict["baci_file_name"]
 
     def load_timba_results(self):
-        pkl_files = list(self.folder_path.glob("*.pkl"))
+        pkl_files = list(self.scen_dir.glob("*.pkl"))
 
         if not pkl_files:
             raise FileNotFoundError(
-                f"   No .pkl file found at: {self.folder_path.resolve()}"
+                f"   No .pkl file found at: {self.scen_dir.resolve()}"
             )
 
         file = max(pkl_files, key=lambda f: f.stat().st_mtime)
@@ -37,7 +33,7 @@ class InputManager:
         return obj["data_periods"], scen_name
 
     def load_baci_data(self):
-        BITRADEPATH = self.folder_path / self.baci_file
-        logger.info(f" Load following file: {self.baci_file}")
+        BITRADEPATH = self.baci_dir / self.baci_file_name
+        logger.info(f" Load following file: {self.baci_file_name}")
         return pd.read_parquet(BITRADEPATH)
 

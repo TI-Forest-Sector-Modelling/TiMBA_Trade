@@ -1,12 +1,10 @@
 
 import logging
 from datetime import datetime
-from pathlib import Path
 
-from timba_trade.paramters.paths import OUTPUT_PATH, PACKAGEDIR, init_path, LOGSPATH
+from timba_trade.paramters.paths import LOG_DIR, init_path
 
-
-def setup_logging(folder_path: Path | None = None) -> None:
+def setup_logging(path_dict:dict):
     root = logging.getLogger()
 
     for handler in root.handlers[:]:
@@ -14,11 +12,10 @@ def setup_logging(folder_path: Path | None = None) -> None:
         handler.close()
 
     fmt = logging.Formatter(
-        "TiMBA_Trade : %(levelname)-8s  %(message)s",
+        "TiMBA_Trade: %(levelname)-8s  %(message)s",
     )
 
-    base_dir = PACKAGEDIR if folder_path is None else Path(folder_path)
-    log_dir = base_dir / OUTPUT_PATH / LOGSPATH
+    log_dir = LOG_DIR if path_dict["LOG_DIR"] is None else path_dict["LOG_DIR"]
     init_path(log_dir)
 
     console = logging.StreamHandler()
@@ -27,7 +24,7 @@ def setup_logging(folder_path: Path | None = None) -> None:
 
     handlers = [console]
 
-    log_file = log_dir / f"{datetime.now():%Y-%m-%d_%H-%M-%S}bilateral_trade_log.log"
+    log_file = log_dir / f"{datetime.now():%Y-%m-%d_%H-%M-%S}_trade_module.log"
 
     try:
         file_handler = logging.FileHandler(

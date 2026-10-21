@@ -14,30 +14,14 @@ logger = logging.getLogger(__name__)
 
 class ProcessManager:
 
-    def __init__(
-            self, 
-            folder_path:Path|None,
-            baci_file_name:Path|None,
-    ):
-        self.data = None
-        self.country_data = None
-        self.partner_data = None
-        self.countries = None
-        self.commodities = None
-        self.periods = None
-        self.dataset = None
-        self.result = None
-        self.start_time = None
-        self.im = InputManager(
-            folder_path=folder_path,
-            baci_file_name=baci_file_name,
-        )
-        self.om = OutputManager(folder_path=folder_path)
+    def __init__(self, path_dict:dict):
+        self.path_dict=path_dict
+        self.im = InputManager(path_dict=self.path_dict)
+        self.om = OutputManager(path_dict=self.path_dict)
 
     def start_process(self, process_description:str):
         self.start_time = time.time()
         logger.info(process_description)
-
 
     def end_process(self, process_description):
         if self.start_time is None:
@@ -49,21 +33,17 @@ class ProcessManager:
             f"{process_description} in {elapsed_time:.1f} seconds"
         )
 
-    def load_timba_process(
-            self, 
-            data:pd.DataFrame|None,
-            scen_name:str|None
-    )->pd.DataFrame:
+    def load_timba_process(self,data:pd.DataFrame|None)->pd.DataFrame:
         
         self.start_process("Beginn to load TiMBA data")
-        self.scen_name = scen_name
+        scen_name = self.path_dict["scen_name"]
         if data is None:
-            data, self.scen_name = self.im.load_timba_results()
+            data, scen_name = self.im.load_timba_results()
         tdp = TiMBADataProcessor(data)
         timba_data = tdp.main()
         self.end_process("TiMBA data loaded")
 
-        return timba_data
+        return timba_data, scen_name
 
     def load_baci_process(self)->pd.DataFrame:
         self.start_process("Beginn to load BACI data")
@@ -74,17 +54,8 @@ class ProcessManager:
 
         return baci_data
 
-    def main_process(
-            self, 
-            td:pd.DataFrame|None, 
-            scen_name:str|None, 
-            save_file:bool=True
-    )->pd.DataFrame:
-        
-        timba_data = self.load_timba_process(
-            data=td, 
-            scen_name=scen_name
-        )
+    def main_process(self, td:pd.DataFrame|None, save_file:bool=True)->pd.DataFrame:
+        timba_data, scen_name = self.load_timba_process(data=td)
         fao_df = CalcManager(data=timba_data).main().copy()
         fao_df = fao_df[[
             "Reporter",
@@ -142,7 +113,7 @@ class ProcessManager:
         if save_file:
             self.om.save_parquet(
                 df=bt_result,
-                file_name=f"BilateralTrade_{self.scen_name}"
+                file_name=f"BilateralTrade_{scen_name}"
             )
 
         self.end_process(f"End of RAS process")
