@@ -28,7 +28,7 @@ default_paths = {
     "SCENARIO_DIR": None,
     "BACI_DIR": None,
     "OUTPUT_DIR": None,
-    "LOG_DIR": Path("E:/log"),
+    "LOG_DIR": None,
     "scen_name": None,
     "baci_file_name": None,
 }

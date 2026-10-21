@@ -1,7 +1,13 @@
 
 # Changelog
 
-## [0.1.5] - 2026-10.21
+## [0.1.6] - 2026-10-21
+
+### Fixed
+- Reworked path resolution by introducing a centralized path dictionary. This enables dynamic path definitions in downstream projects and resolves common file-not-found errors.
+
+
+## [0.1.5] - 2026-10-21
 
 ### Added
 - Support for specifying a custom BACI data filename.
